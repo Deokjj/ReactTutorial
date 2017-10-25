@@ -28,23 +28,42 @@ const nextLink = (
   <a href="/components">Next</a>
 );
 
-//Redering: time.
-setInterval(
-  ()=>{
-    ReactDOM.render(
-      new Date().toLocaleTimeString(),
-      document.getElementById('clock') // renders everything insde clock
+class Clock extends Component {
+  constructor(props){
+    super(props);
+    this.state = {date: new Date()};
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000
     );
-  },
-  1000
-);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  tick() {
+    this.setState({
+      date: new Date()
+    });
+  }
+
+  render() {
+    return(
+      <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+    );
+  }
+}
 
 class App extends Component {
   render() {
     return (
       <div class="App">
         {greetingEle}
-        <h2 id="clock">{new Date().toLocaleTimeString()}</h2>
+        <Clock/>
         {nextLink}
         <Cat/>
       </div>
